@@ -4,7 +4,7 @@ import subprocess
 from pathlib import Path
 
 
-# Forbidden patterns from app_toyhobby source
+# Load forbidden patterns from external denylist
 FORBIDDEN_PATTERNS = [
     r"\bgenai-toyhobby\b",
     r"\bchatbot\b",

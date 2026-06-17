@@ -9,7 +9,7 @@ This document establishes the design rationale for a portable JSONL-to-XLSX rend
 | Meta | Statement | Verification |
 |---|---|---|
 | purpose0 | Survive WSL/Claude/tmp-worktree loss | Engine can be re-instantiated from SSOT bare repo |
-| meta1 | Preserve reusable inventions, not local artifacts | This repo contains only portable code, no app_toyhobby secrets |
+| meta1 | Preserve reusable inventions, not local artifacts | This repo contains only portable code, no domain-specific secrets |
 | meta2 | Make JSONL-to-XLSX reusable across repos/projects | Single module works with any masters/edges/config structure |
 | meta3 | Separate portable technique from non-portable data | No hardcoded customer/project/person/product names |
 | meta4 | Prevent future agents from promoting confidential data | Test suite verifies forbidden patterns absent |
@@ -164,7 +164,7 @@ See `docs/EXPORTABILITY.md` for detailed portability mapping.
 **Summary**: 
 - ✅ Portable: Core reduce/render logic, schema/config model, synthetic examples
 - ⚠️ Borderline: Template generation (test creates synthetic templates, not copied)
-- ❌ Non-portable: app_toyhobby-specific master data, customer product names, real URLs
+- ❌ Non-portable: Domain-specific master data, customer/product/company identifiers, real infrastructure URLs
 
 ## Future Extensions
 

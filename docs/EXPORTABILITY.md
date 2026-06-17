@@ -20,13 +20,13 @@ This document classifies code and content in this repo against the 10-point meta
 | | Synthetic masters/step.jsonl | ✅ Allowed | Names: check-001, check-002, stp-*** | Examples: `examples/minimal/masters/step.jsonl` |
 | | Synthetic sheets.jsonl | ✅ Allowed | Generic sheet rendering config | Examples: `examples/minimal/config/sheets.jsonl` |
 | | Template generation (tests) | ✅ Allowed | Tests create XLSX programmatically (not copied) | Tests: `tests/test_render.py` |
-| **Non-Portable** | app_toyhobby business objects | ❌ Excluded | Customer-specific domain (releases, steps, checks) | Not in this repo |
-| | Concrete XLSX file from app_toyhobby | ❌ Excluded | Contains real customer data, formatting | Not in this repo |
-| | Department/team/person names from source | ❌ Excluded | Company-internal identifiers | Not in this repo |
+| **Non-Portable** | Domain-specific business objects | ❌ Excluded | Customer/project-specific implementations | Not in this repo |
+| | Concrete XLSX file from source | ❌ Excluded | Contains real customer data, formatting | Not in this repo |
+| | Department/team/person names | ❌ Excluded | Company-internal identifiers | Not in this repo |
 | | Real URLs/endpoints | ❌ Excluded | Infrastructure-specific | Not in this repo |
-| **Forbidden** | Package names: `genai-toyhobby`, `bandai-*`, `chatbot` | ❌ Forbidden | Customer/company identifiers | Verified absent in `tests/test_exportability.py` |
-| | Domain model from app_toyhobby (LLMOps-specific) | ❌ Forbidden | Not reusable; project-specific | Verified absent |
-| | Azure AD auth config from app_toyhobby | ❌ Forbidden | Credential & infrastructure-specific | Verified absent |
+| **Forbidden** | Project/customer/product identifiers | ❌ Forbidden | Company-specific names (denylist in scripts/denylist.txt) | Verified absent via external denylist |
+| | Domain-specific business model | ❌ Forbidden | Not reusable; implementation-specific | Verified absent |
+| | Cloud auth/credentials | ❌ Forbidden | Credential & infrastructure-specific | Verified absent |
 | | GCP project IDs, BigQuery dataset names | ❌ Forbidden | Infrastructure-specific | Verified absent |
 | | Japanese company/product names | ❌ Forbidden | PII/confidential | Verified absent |
 
@@ -55,7 +55,7 @@ This document classifies code and content in this repo against the 10-point meta
 ### ⚠️ What Requires Adaptation
 
 1. **Domain Model**
-   - app_toyhobby uses "release", "step", "check" (LLMOps-specific)
+   - Initial implementation uses "release", "step", "check" (domain-specific)
    - Map to your domain's entities and natural keys
    - Example: swap release→deployment, step→phase, check→validation
 
@@ -94,9 +94,9 @@ This document classifies code and content in this repo against the 10-point meta
 - **False negatives possible** if forbidden names are buried in comments or strings
 
 ### Before Proposing/Publishing
-1. Run `pytest tests/test_exportability.py -v`
-2. Run `git grep -i "genai\|toyhobby\|chatbot\|bandai\|namco"` (manual audit)
-3. Verify no `.xlsx`, `.jpg`, `.pdf` from source repo are present
+1. Populate `scripts/denylist.txt` with identifiers from your source
+2. Run `pytest tests/test_exportability.py -v` to verify denylist patterns absent
+3. Verify no `.xlsx`, `.jpg`, `.pdf` files present in repo
 4. Verify no `.env`, `.json` files with credentials
 
 ## Implementation Checklist for New Projects
@@ -132,9 +132,9 @@ When adopting this engine in a new project:
 - **Mitigation**: All fixtures use synthetic names verified by test suite
 - **Verification**: `pytest tests/test_exportability.py` must pass
 
-### Risk: Code depends on app_toyhobby specifics
-- **Mitigation**: No imports from app_toyhobby; pure Python + openpyxl
-- **Verification**: Check `grep -r "app_toyhobby\|dify\|chatbot"` returns empty
+### Risk: Code depends on initial implementation specifics
+- **Mitigation**: No imports from initial implementation; pure Python + openpyxl
+- **Verification**: `pytest tests/test_exportability.py` with denylist must pass
 
 ### Risk: Hardcoded values embedded in code
 - **Mitigation**: All values in `config/` JSONL files; code is generic

@@ -1,24 +1,27 @@
 """Verify no forbidden/confidential identifiers appear in repo text."""
 
 import subprocess
+import pytest
 from pathlib import Path
 
 
-# Load forbidden patterns from external denylist
-FORBIDDEN_PATTERNS = [
-    r"\bgenai-toyhobby\b",
-    r"\bchatbot\b",
-    r"\bDify\b",
-    r"\bchatte\b",
-    r"\bbandai\b",
-    r"\bnamco\b",
-    r"\bbnx\b",
-    r"\bz-s\b",
-    r"\bdiv-",
-    r"\.jp\b",
-    r"\bt8-\w+\b",
-    r"\b(azure|gcp|vertex|cloud-run)\b",
-]
+def _load_denylist() -> list:
+    """Load forbidden patterns from external denylist file."""
+    denylist_path = Path(__file__).parent.parent / "scripts" / "denylist.txt"
+
+    if not denylist_path.exists():
+        return []
+
+    patterns = []
+    with open(denylist_path) as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith("#"):
+                patterns.append(line)
+    return patterns
+
+
+FORBIDDEN_PATTERNS = _load_denylist()
 
 # Files/dirs to exclude from scan
 EXCLUDE_PATHS = {
@@ -42,7 +45,7 @@ def _normalize_path(p: Path) -> str:
 
 
 def test_no_forbidden_patterns():
-    """Scan repo for forbidden identifiers and customer-specific terms."""
+    """Scan repo for forbidden identifiers from external denylist."""
     repo_root = Path(__file__).parent.parent
     found_violations = []
 

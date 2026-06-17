@@ -1,93 +1,53 @@
-# jsonxlsx: Portable JSONL-to-XLSX Engine
+# jsonxlsx: Proposal Container
 
-A minimal, reusable Python package for rendering XLSX workbooks from append-only JSONL records using schema-driven natural key dispatch and configuration-driven sheet templating.
+This repository is a **proposal container** for a portable JSONL-to-XLSX rendering engine.
 
-## Purpose Lineage
+## Status
 
-- **purpose0**: Survive WSL/Claude/tmp-worktree loss
-- **meta1**: Preserve reusable inventions, not local artifacts
-- **meta2**: Make JSONL-to-XLSX method reusable across repos/projects
-- **meta3**: Separate portable technique from non-portable customer/project/person/product data
-- **meta4**: Prevent future agents from promoting confidential identifiers or payloads
-- **meta5**: Leave proposal/ADR material that can be reviewed
-- **meta6**: Increase company value through reusable process/IP assets
-- **meta7**: Improve operational continuity under tool failure
-- **meta8**: Make organizational learning durable
-- **meta9**: Keep decision provenance in SSOT
-- **meta10**: Terminal assumption is corporate sale; only buyer-transferable assets are proposal candidates
+- **Branch**: `main` (proposal container seed)
+- **Portable Engine**: `proposal/jsonxlsx-portable-engine-260618`
+- **Main Content**: Not accepted; this is a proposal for review
 
-## Core Features
+## What This Is
 
-### Append-Only JSONL Reduce
-- **Natural key dispatch** driven by `config/schema.jsonl`
-- **Latest-wins semantics** using `_ts` timestamps
-- **Tombstone deletion** via `_deleted: true`
-- **Generic fallback** for unmatched schemas with observability
+This repo holds the SSOT (Single Source of Truth) for a design proposal and reference implementation of a portable JSONL-to-XLSX engine. The design is documented in `/docs/` and the implementation lives on the proposal branch.
 
-### Config-Driven Rendering
-- **Schema definitions** in `config/schema.jsonl` declare natural keys
-- **Sheet configuration** in `config/sheets.jsonl` specify rendering strategy
-- **Edge lookups** for joining masters with relationship edges
-- **Cell overrides** for hardcoded template values
-- **Bumon (department) matrix** support for multi-dimensional data
+## Using the Proposal
 
-### Template-Based Output
-- Load reference XLSX template (format/style source)
-- Apply `data_replace` strategy (clear + inject) or `preserve` (template + overrides)
-- Copy styles from template rows to generated rows
-- Support for formula cells (with row interpolation)
+1. **Review the Design**:
+   - `docs/DESIGN.md` — Design rationale and patterns
+   - `docs/EXPORTABILITY.md` — Portability assessment
 
-## Usage
+2. **See the Implementation**:
+   - Checkout `proposal/jsonxlsx-portable-engine-260618`
+   - Core engine: `jsonxlsx/` (300 LOC)
+   - Tests: `tests/` (180 LOC)
+   - Examples: `examples/minimal/`
 
-```bash
-# Synthetic example
-python -m jsonxlsx.engine \
-  --template examples/minimal/template.xlsx \
-  --output examples/minimal/output.xlsx \
-  --masters examples/minimal/masters \
-  --edges examples/minimal/edges \
-  --config examples/minimal/config
-```
+3. **Adopt in Your Project**:
+   - Clone from this SSOT
+   - Customize `config/schema.jsonl` for your domain entities
+   - Map your fields to XLSX columns in `config/sheets.jsonl`
+   - Run `python -m jsonxlsx.engine` with your masters/edges/config
 
-## Project Structure
+## Key Features
 
-```
-jsonxlsx/
-  engine.py              # Core JSONL→XLSX renderer
-  reduce.py              # Append-only reduce logic
-  render.py              # Template & config rendering
-examples/
-  minimal/
-    config/
-      schema.jsonl       # Natural key definitions
-      sheets.jsonl       # Sheet rendering config
-    masters/
-      release.jsonl      # Sample master records
-    edges/
-      (empty)            # Optional edge records
-    template.xlsx        # Reference template
-tests/
-  test_reduce.py         # Reduce/tombstone semantics
-  test_render.py         # XLSX cell value verification
-  test_exportability.py  # Confirm no forbidden names
-nix/
-  flake.nix              # Reproducible environment
-pyproject.toml           # Python package metadata
-```
+- **Append-only JSONL reduce** with latest-wins and tombstone deletion
+- **Schema-driven natural key dispatch** (config, not code)
+- **Template-based XLSX rendering** with style inheritance
+- **Edge lookups** for relational joins
+- **Target axis matrices** for N×M assignment grids
 
-## Design Principles
+## Decision: Proposal Status
 
-1. **Pure Configuration**: All business logic lives in JSONL config, not in code
-2. **Append-Only**: Source data is immutable; reduce determines final state
-3. **Natural Keys**: Each record type declares its identity fields
-4. **Template-Driven Styling**: Format comes from XLSX template, data from records
-5. **No Hardcoded Values**: Decisions expressed as config, traceable and auditable
+This is a **proposal**, not accepted code. Intended audiences:
 
-## Reference
+- **Architects**: Review design decisions in `docs/DESIGN.md`
+- **Potential adopters**: See `docs/EXPORTABILITY.md` for what you can take
+- **Implementers**: Reference implementation on `proposal/jsonxlsx-portable-engine-260618`
 
-Based on portable patterns extracted from:
-- `gen_tested_xlsx.py`: TSV→XLSX simple view transformation
-- `build_xlsx.py`: Full masters/edges/config rendering with reduce semantics
+---
 
-These implementations demonstrate that JSONL reduce + config-driven rendering is a durable pattern
-suitable for cross-repo, cross-project reuse.
+**SSOT Location**: `ssh://100.124.250.91/home/nixos/repos/jsonxlsx.git`  
+**Proposal Date**: 2026-06-18  
+**Generation**: Gen1 (Claude Code)

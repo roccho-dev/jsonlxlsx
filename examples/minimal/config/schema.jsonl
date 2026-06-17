@@ -1,0 +1,3 @@
+{"type": "release", "presence": ["id", "name", "status"], "key": ["id"], "non_null": ["id", "name"]}
+{"type": "step", "presence": ["id", "release_id", "order", "check_name"], "key": ["id"], "non_null": ["id", "release_id"]}
+{"type": "bumon", "presence": ["id", "name", "order"], "key": ["id"], "non_null": ["id"]}

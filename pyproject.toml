@@ -1,0 +1,23 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "jsonxlsx"
+version = "0.1.0"
+description = "Portable JSONL-to-XLSX engine with schema-driven natural key dispatch"
+authors = [{name = "roccho-dev", email = "roccho-dev@users.noreply.github.com"}]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "openpyxl>=3.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
+
+[project.scripts]
+jsonxlsx = "jsonxlsx.engine:main"

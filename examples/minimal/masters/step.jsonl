@@ -1,0 +1,3 @@
+{"id": "stp-001", "release_id": "rel-001", "order": 1, "check_name": "check-001", "_ts": "2026-01-01T10:30:00"}
+{"id": "stp-002", "release_id": "rel-001", "order": 2, "check_name": "check-002", "_ts": "2026-01-01T10:30:00"}
+{"id": "stp-003", "release_id": "rel-002", "order": 1, "check_name": "check-003", "_ts": "2026-01-02T10:30:00"}

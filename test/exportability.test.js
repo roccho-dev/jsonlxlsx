@@ -49,7 +49,7 @@ describe('exportability', () => {
         const result = execSync(
           `grep -r "import pytest\\|from pytest\\|def test_\\|@pytest" ${dir} 2>/dev/null || true`
         ).toString();
-        return result.trim().split('\n').filter((l) => l);
+        return result.trim().split('\n').filter((l) => l && !l.includes('exportability.test.js'));
       } catch {
         return [];
       }
@@ -77,7 +77,7 @@ describe('exportability', () => {
         const result = execSync(
           `grep -ri "${pattern}" src test examples 2>/dev/null || true`
         ).toString();
-        return result.trim().split('\n').filter((l) => l && !l.includes('example'));
+        return result.trim().split('\n').filter((l) => l && !l.includes('example') && !l.includes('exportability.test.js'));
       } catch {
         return [];
       }

@@ -89,22 +89,23 @@ export async function renderSheetDataReplace(config, state, workbook) {
               return false;
             }
             if (lookup.match) {
-              return Object.entries(lookup.match).every(
+              const hasMatch = Object.entries(lookup.match).every(
                 ([edgeField, masterField]) =>
                   e[edgeField] === master[masterField]
               );
+              if (!hasMatch) return false;
+            }
+            if (lookup.where) {
+              const whereOk = Object.entries(lookup.where).every(
+                ([field, val]) => e[field] === val
+              );
+              if (!whereOk) return false;
             }
             return true;
           });
 
           if (edgeMatches.length > 0) {
             const match = edgeMatches[0];
-            if (lookup.where) {
-              const whereOk = Object.entries(lookup.where).every(
-                ([field, val]) => match[field] === val
-              );
-              if (!whereOk) continue;
-            }
             const cell = rowObj.getCell(col.col);
             cell.value = match[lookup.select] ?? '';
           }

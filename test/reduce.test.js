@@ -65,8 +65,8 @@ describe('reduceLog', () => {
 
   it('excludes records marked _deleted: true', () => {
     const records = [
-      { id: 'a', value: 'x', _ts: '2026-01-01' },
-      { id: 'a', value: 'deleted', _ts: '2026-01-02', _deleted: true },
+      { id: 'a', _ts: '2026-01-01' },
+      { id: 'a', _ts: '2026-01-02', _deleted: true },
     ];
     const schema = new Map();
     const result = reduceLog(records, schema);

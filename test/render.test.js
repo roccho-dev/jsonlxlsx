@@ -86,7 +86,7 @@ describe('renderSheetDataReplace', () => {
     await renderSheetDataReplace(config, state, workbook);
 
     expect(ws.getCell('A2').value).toBe('stp-1');
-    expect(ws.getCell('A3').value).toBeUndefined();
+    expect(ws.getCell('A3').value).toBeNull();
   });
 
   it('applies literal values in columns', async () => {

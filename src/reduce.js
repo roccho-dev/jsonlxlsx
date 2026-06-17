@@ -37,16 +37,20 @@ export function initSchema(schemaRecords) {
 
 /**
  * Compute natural key for a record given schema.
- * Returns (type, ...keyValues) tuple or null if no schema matches.
+ * Returns (type, ...keyValues) tuple or null if no schema matches or constraints violated.
  * @param {Object} record - Data record
  * @param {Map<string, Object>} schema - Type → {presence, key} mapping
  * @returns {Array|null} [type, ...keyValues] or null
  */
 function recordKey(record, schema) {
+  let matchedPresence = false;
+
   // Try schema-driven dispatch
   for (const [type, spec] of schema.entries()) {
     const hasAll = spec.presence.every((f) => f in record);
     if (!hasAll) continue;
+
+    matchedPresence = true;
 
     // Check non_null constraints if present
     if (spec.nonNull.length > 0) {
@@ -59,7 +63,14 @@ function recordKey(record, schema) {
     return [type, ...keyVals];
   }
 
-  // Fallback: generic key from sorted non-metadata fields
+  // If any schema matched presence but all failed constraints, exclude record
+  if (matchedPresence) return null;
+
+  // Fallback: generic key from 'id' field if present, otherwise from sorted non-metadata fields
+  if ('id' in record) {
+    return [record.id];
+  }
+
   const nonMeta = Object.entries(record)
     .filter(([k]) => !k.startsWith('_'))
     .sort(([a], [b]) => a.localeCompare(b))

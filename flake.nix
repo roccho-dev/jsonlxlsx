@@ -16,9 +16,11 @@
           pname = "jsonxlsx";
           version = "0.1.0";
           src = ./.;
+          format = "pyproject";
 
           propagatedBuildInputs = with pkgs.python3Packages; [
             openpyxl
+            flit-core
           ];
 
           nativeCheckInputs = with pkgs.python3Packages; [
@@ -33,11 +35,12 @@
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs.python3Packages; [
-            python3
             openpyxl
             pytest
             pytest-cov
+            flit-core
           ] ++ (with pkgs; [
+            python3
             git
           ]);
 
@@ -46,8 +49,8 @@
           '';
         };
 
-        checks.x86_64-linux = {
-          jsonxlsx-tests = self.packages.x86_64-linux.default;
+        checks = {
+          jsonxlsx-tests = self.packages.${system}.default;
         };
       }
     );

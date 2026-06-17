@@ -82,12 +82,12 @@ def test_reduce_schema_bootstrap():
     """Schema declarations themselves use fixed natural key."""
     records = [
         {"type": "release", "presence": ["id"], "key": ["id"]},
-        {"type": "release", "presence": ["id", "name"], "key": ["id"]},
+        {"type": "release", "presence": ["id", "name"], "key": ["id", "name"]},
     ]
     init_schema([])
     result = reduce_log(records)
     assert len(result) == 1
-    assert "name" in result[0]["key"]
+    assert result[0]["key"] == ["id", "name"]
 
 
 def test_reduce_non_null_constraint():

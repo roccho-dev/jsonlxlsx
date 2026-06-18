@@ -1,0 +1,40 @@
+{
+  "name": "@jsonlxlsx/engine",
+  "version": "0.1.0",
+  "description": "JSONL-to-XLSX rendering engine: append-only reduce + template-based render",
+  "type": "module",
+  "main": "./src/engine.js",
+  "exports": {
+    ".": "./src/engine.js",
+    "./reduce": "./src/reduce.js",
+    "./render": "./src/render.js"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check:exportability": "node scripts/check-exportability.js",
+    "cli": "node src/cli.js",
+    "example": "node scripts/generate-example.js"
+  },
+  "keywords": [
+    "jsonl",
+    "xlsx",
+    "append-only",
+    "reduce",
+    "schema-driven"
+  ],
+  "author": "Gen1 (Claude Code)",
+  "license": "Proprietary",
+  "dependencies": {
+    "exceljs": "^4.3.0"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.0"
+  },
+  "overrides": {
+    "uuid": "^11.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

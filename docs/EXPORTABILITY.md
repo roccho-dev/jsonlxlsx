@@ -8,18 +8,18 @@ This document classifies code and content in this repo against the 10-point meta
 
 | Category | Item | Classification | Rationale | Usage |
 |---|---|---|---|---|
-| **Portable Inventions** | Append-only reduce logic | ✅ Portable | Generic algorithm independent of domain | Core: `jsonxlsx/reduce.py` |
-| | Schema-driven natural key dispatch | ✅ Portable | Config-driven; no hardcoded keys | Core: `jsonxlsx/reduce.py::_record_key()` |
-| | Latest-wins semantics with _ts | ✅ Portable | Generic timestamp/tombstone pattern | Core: `jsonxlsx/reduce.py::reduce_log()` |
-| | Template-based XLSX rendering | ✅ Portable | openpyxl pattern; style/data separation | Core: `jsonxlsx/render.py` |
-| | Edge lookup (relation join) | ✅ Portable | Generic FK-like join pattern | Core: `jsonxlsx/render.py::render_sheet_data_replace()` |
-| | Bumon (N×M matrix) rendering | ✅ Portable | Parametric matrix filling | Core: `jsonxlsx/render.py::render_sheet_data_replace()` |
-| | Engine CLI & config loading | ✅ Portable | Orchestrates reduce+render; no domain logic | Core: `jsonxlsx/engine.py` |
-| **Sanitized Samples** | Synthetic schema.jsonl | ✅ Allowed | Uses abstract names (release, step, bumon) | Examples: `examples/minimal/config/schema.jsonl` |
+| **Portable Inventions** | Append-only reduce logic | ✅ Portable | Generic algorithm independent of domain | Core: `src/reduce.js` |
+| | Schema-driven natural key dispatch | ✅ Portable | Config-driven; no hardcoded keys | Core: `src/reduce.js::recordKey()` |
+| | Latest-wins semantics with _ts | ✅ Portable | Generic timestamp/tombstone pattern | Core: `src/reduce.js::reduceLog()` |
+| | Template-based XLSX rendering | ✅ Portable | exceljs pattern; style/data separation | Core: `src/render.js` |
+| | Edge lookup (relation join) | ✅ Portable | Generic FK-like join pattern | Core: `src/render.js::renderSheetDataReplace()` |
+| | Assignment matrix rendering | ✅ Portable | Parametric N×M grid filling with generic keys | Core: `src/render.js::renderSheetDataReplace()` |
+| | Engine CLI & config loading | ✅ Portable | Orchestrates reduce+render; no domain logic | Core: `src/engine.js` |
+| **Sanitized Samples** | Synthetic schema.jsonl | ✅ Allowed | Uses abstract names (release, step) | Examples: `examples/minimal/config/schema.jsonl` |
 | | Synthetic masters/release.jsonl | ✅ Allowed | Names: release-alpha, release-beta | Examples: `examples/minimal/masters/release.jsonl` |
 | | Synthetic masters/step.jsonl | ✅ Allowed | Names: check-001, check-002, stp-*** | Examples: `examples/minimal/masters/step.jsonl` |
 | | Synthetic sheets.jsonl | ✅ Allowed | Generic sheet rendering config | Examples: `examples/minimal/config/sheets.jsonl` |
-| | Template generation (tests) | ✅ Allowed | Tests create XLSX programmatically (not copied) | Tests: `tests/test_render.py` |
+| | Template generation (tests) | ✅ Allowed | Tests create XLSX programmatically (not copied) | Tests: `test/render.test.js` |
 | **Non-Portable** | Domain-specific business objects | ❌ Excluded | Customer/project-specific implementations | Not in this repo |
 | | Concrete XLSX file from source | ❌ Excluded | Contains real customer data, formatting | Not in this repo |
 | | Department/team/person names | ❌ Excluded | Company-internal identifiers | Not in this repo |
@@ -35,9 +35,9 @@ This document classifies code and content in this repo against the 10-point meta
 ### ✅ What You Can Take
 
 1. **Core Engine**
-   - `jsonxlsx/reduce.py`: Append-only reduce + natural key dispatch
-   - `jsonxlsx/render.py`: Template-based rendering + joins
-   - `jsonxlsx/engine.py`: CLI orchestration
+   - `src/reduce.js`: Append-only reduce + natural key dispatch
+   - `src/render.js`: Template-based rendering + joins
+   - `src/engine.js`: CLI orchestration
    - Tests: Reduce/render logic verification
 
 2. **Design Patterns**
@@ -89,14 +89,14 @@ This document classifies code and content in this repo against the 10-point meta
 ## Testing & Validation
 
 ### Exportability Tests
-- `tests/test_exportability.py`: Scans repo for forbidden patterns (grep-based)
-- Runs as part of standard `pytest` suite
+- `scripts/check-exportability.js`: Scans repo for forbidden patterns (grep-based)
+- Runs as part of standard `npm run check:exportability` command
 - **False negatives possible** if forbidden names are buried in comments or strings
 
 ### Before Proposing/Publishing
 1. Populate `scripts/denylist.txt` with identifiers from your source
-2. Run `pytest tests/test_exportability.py -v` to verify denylist patterns absent
-3. Verify no `.xlsx`, `.jpg`, `.pdf` files present in repo
+2. Run `npm run check:exportability` to verify denylist patterns absent
+3. Verify no `.xlsx`, `.jpg`, `.pdf` files present in repo (except outputs)
 4. Verify no `.env`, `.json` files with credentials
 
 ## Implementation Checklist for New Projects
@@ -122,7 +122,7 @@ When adopting this engine in a new project:
   - Mark data_start_row and style_template_row
   - Engine will copy styles at render time
 
-- [ ] Run reduce_log() + render_sheet_data_replace()
+- [ ] Run engine() or CLI
   - No code changes required if config is correct
   - All business decisions stay in config
 
@@ -130,15 +130,15 @@ When adopting this engine in a new project:
 
 ### Risk: Accidental leakage of customer data
 - **Mitigation**: All fixtures use synthetic names verified by test suite
-- **Verification**: `pytest tests/test_exportability.py` must pass
+- **Verification**: `npm run check:exportability` must pass
 
 ### Risk: Code depends on initial implementation specifics
-- **Mitigation**: No imports from initial implementation; pure Python + openpyxl
-- **Verification**: `pytest tests/test_exportability.py` with denylist must pass
+- **Mitigation**: No imports from initial implementation; pure JavaScript + exceljs
+- **Verification**: `npm run check:exportability` with denylist must pass
 
 ### Risk: Hardcoded values embedded in code
 - **Mitigation**: All values in `config/` JSONL files; code is generic
-- **Verification**: Review `jsonxlsx/*.py` for any string literals with business meaning
+- **Verification**: Review `src/*.js` for any string literals with business meaning
 
 ## Decision: Exportability Approved
 

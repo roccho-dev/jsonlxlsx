@@ -29,7 +29,7 @@ This document establishes the design rationale for a portable JSONL-to-XLSX rend
 - Natural key identifies equivalence; latest _ts wins
 - _deleted: true tombstones records without hard deletes
 
-**Implementation**: `jsonxlsx/reduce.py::reduce_log()`
+**Implementation**: `src/reduce.js::reduceLog()`
 - Partition records by natural key (config-driven)
 - For each group, keep only _ts-bearing records if any exist
 - Select winner by latest _ts
@@ -56,7 +56,7 @@ records: [
 - Different types coexist in the same log with different keys
 - Schema is itself append-only (bootstrapped from config/schema.jsonl)
 
-**Implementation**: `jsonxlsx/reduce.py::_record_key()`
+**Implementation**: `src/reduce.js::recordKey()`
 - For each schema spec, check if record has all presence fields
 - If all presence + non_null constraints met, return (type, *key_values)
 - Fallback to generic key (sorted non-metadata fields) if no schema matches
@@ -76,7 +76,7 @@ masters/mixed.jsonl:
 
 **Why**: Styling, layout, and business rules are declarations, not imperative code.
 
-**Implementation**: `jsonxlsx/render.py` + `config/sheets.jsonl`
+**Implementation**: `src/render.js` + `config/sheets.jsonl`
 - Load reference XLSX template (format/style source)
 - For each sheet config, apply strategy (preserve or data_replace)
 - data_replace: clear data rows, inject from masters, apply styles from template
@@ -104,7 +104,7 @@ masters/mixed.jsonl:
 
 **Why**: Relationship data lives in separate "edges" JSONL, reducing duplication and coupling.
 
-**Implementation**: `jsonxlsx/render.py::render_sheet_data_replace()`
+**Implementation**: `src/render.js::renderSheetDataReplace()`
 - After normal column rendering, scan for edge_lookup directives
 - For each edge lookup, join masters record with edges on match criteria
 - Apply where conditions, select result field
@@ -124,14 +124,14 @@ masters/mixed.jsonl:
 
 **Portable Pattern**: Relationship modeling without hardcoding join logic.
 
-### 5. Bumon (Department) Matrix Support
+### 5. Assignment Matrix Support
 
-**Why**: Multi-dimensional assignment grids (rows = items, columns = departments, cells = marks) are common in Japanese business.
+**Why**: Multi-dimensional assignment grids (rows = items, columns = categories, cells = marks) are common across workflow reports.
 
-**Implementation**: `jsonxlsx/render.py::render_sheet_data_replace()`
-- bumon_matrix config specifies edge source, field mappings, column range
-- For each record, match edges by id_field, build map of bumon_id → mark_field
-- Fill matrix cells by (record_row, bumon_column)
+**Implementation**: `src/render.js::renderSheetDataReplace()`
+- assignment_matrix config specifies edge source, field mappings, column range
+- For each record, match edges by id_field, build map of assignment_key → mark_field
+- Fill matrix cells by (record_row, assignment_column)
 
 **Portable Pattern**: Generic support for N×M assignment matrices without custom code.
 

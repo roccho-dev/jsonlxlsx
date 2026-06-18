@@ -1,13 +1,14 @@
-# jsonxlsx JS-Only Engine
+# jsonlxlsx JS-Only Engine
 
 This is a **JavaScript-only re-proposal** of the JSONL-to-XLSX rendering engine, addressing the Python implementation from the prior proposal.
 
 ## Status
 
-- **Branch**: `proposal/jsonxlsx-js-only-engine-260618`
+- **Branch**: `proposal/jsonlxlsx-js-only-engine-260618`
 - **Language**: JavaScript (ES modules)
 - **Core Libraries**: exceljs (XLSX), vitest (tests)
 - **Prior Proposal Issue**: Python implementation (`*.py`, `pyproject.toml`) — **rejected, rewritten in JS**
+- **Rename/Supersede**: `jsonxlsx` is the superseded source name; `jsonlxlsx` is canonical. The old repo remains compatibility residue and is not deleted.
 
 ## Quick Start
 
@@ -206,7 +207,9 @@ The engine will copy styles from row 2 of your template and inject data starting
 
 ---
 
-**SSOT**: `ssh://100.124.250.91/home/nixos/repos/jsonxlsx.git`  
+**SSOT**: `ssh://100.124.250.91/home/nixos/repos/jsonlxlsx.git`  
 **Proposal Date**: 2026-06-18  
-**Branch**: `proposal/jsonxlsx-js-only-engine-260618`  
-**Author**: Gen1 (Claude Code)
+**Branch**: `proposal/jsonlxlsx-js-only-engine-260618`  
+**Author**: Gen1 (Claude Code), canonical rename by Gen2 Codex
+
+**Supersedes**: `ssh://100.124.250.91/home/nixos/repos/jsonxlsx.git` branch `proposal/jsonxlsx-js-only-engine-260618` at `cc5bc67c2be0e8d401bdb140d49cb252ddf0c927`; retained as compatibility residue.

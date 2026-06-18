@@ -1,5 +1,5 @@
 {
-  "name": "@jsonxlsx/engine",
+  "name": "@jsonlxlsx/engine",
   "version": "0.1.0",
   "description": "JSONL-to-XLSX rendering engine: append-only reduce + template-based render",
   "type": "module",

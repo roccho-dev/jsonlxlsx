@@ -9,6 +9,20 @@ This is a **JavaScript-only re-proposal** of the JSONL-to-XLSX rendering engine,
 - **Core Libraries**: exceljs (XLSX), vitest (tests)
 - **Prior Proposal Issue**: Python implementation (`*.py`, `pyproject.toml`) — **rejected, rewritten in JS**
 
+## Quick Start
+
+Verify the engine works in ~30 seconds:
+
+```bash
+npm ci
+npm test
+npm run check:exportability
+npm audit --audit-level=moderate
+npm run example
+```
+
+This generates `examples/output.xlsx` with two sheets (`releases` and `steps`) containing sample data from `examples/minimal/`.
+
 ## What This Is
 
 A portable JSONL-to-XLSX engine with:
@@ -39,6 +53,21 @@ npm install
 
 ## Usage
 
+### Quickest Example: No Template Required
+
+The minimal example works **without** providing a template. The engine creates sheets from your config:
+
+```bash
+node src/cli.js \
+  --schema examples/minimal/config/schema.jsonl \
+  --masters examples/minimal/masters \
+  --edges "" \
+  --config examples/minimal/config/sheets.jsonl \
+  --output output.xlsx
+```
+
+This creates `output.xlsx` with sheets named `releases` and `steps`, populated from the data in `examples/minimal/masters/`.
+
 ### As a Library
 
 ```javascript
@@ -52,14 +81,14 @@ const state = materialize({
 });
 
 await render({
-  templatePath: 'template.xlsx',
+  templatePath: null,  // Optional: omit for no template, or provide a styled template.xlsx
   configContent: sheetsJsonl,
   state,
   outputPath: 'output.xlsx',
 });
 ```
 
-### As a CLI
+### As a CLI (with optional template)
 
 ```bash
 node src/cli.js \
@@ -70,6 +99,8 @@ node src/cli.js \
   --template template.xlsx \
   --output output.xlsx
 ```
+
+Omit `--template` if you want the engine to create plain sheets. Provide one if you want to apply your styles.
 
 ## Project Structure
 
@@ -133,13 +164,33 @@ See `docs/EXPORTABILITY.md` for detailed assessment.
 
 ## For Adopters
 
-1. **Customize schema**: Define your entity types in `config/schema.jsonl`
-2. **Create template**: Design XLSX with your styles
-3. **Map fields**: Configure columns in `config/sheets.jsonl`
-4. **Provide data**: Append JSONL records to `masters/` and `edges/`
-5. **Render**: Call `engine()` or CLI to produce output XLSX
+### Minimal Path (No Template)
 
-No code changes required if your config is correct.
+1. **Define schema**: Create `config/schema.jsonl` with your entity types
+2. **Map fields**: Create `config/sheets.jsonl` with columns (see `examples/minimal/config/sheets.jsonl`)
+3. **Provide data**: Add JSONL records to `masters/` and `edges/`
+4. **Render**: Run the CLI (or call `engineFromDir()`) — sheets are created automatically
+
+**No template file is needed.** The engine generates plain sheets from your config.
+
+### Styled Path (With Template)
+
+If you want to apply custom styles (colors, fonts, borders):
+
+1. Design an XLSX template with your styles (header row, fonts, fills, borders, etc.)
+2. In your sheet config, set:
+   - `data_start_row`: Row where data injection begins (e.g., 2, skipping the header in row 1)
+   - `style_template_row`: Row from which styles are copied to all data rows (e.g., 2)
+3. Provide the template path to the CLI or library call
+
+Example sheet config with template:
+```json
+{"sheet":"releases","source":"release","strategy":"data_replace","data_start_row":2,"style_template_row":2,"columns":[{"col":1,"src":"id"},{"col":2,"src":"name"}]}
+```
+
+The engine will copy styles from row 2 of your template and inject data starting at row 2, applying the same styles to all rows.
+
+**No code changes required** if your config is correct.
 
 ## Implementation Notes
 

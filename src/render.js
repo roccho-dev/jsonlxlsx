@@ -178,6 +178,35 @@ export async function render(options) {
     workbook.addWorksheet('Sheet1');
   }
 
+  // If no template but we have config, create sheets from config
+  if (!options.templatePath && options.configContent) {
+    const lines = options.configContent
+      .split('\n')
+      .map((l) => l.trim())
+      .filter((l) => l);
+    const sheetNames = new Set();
+    for (const line of lines) {
+      const config = JSON.parse(line);
+      if (config.sheet && !sheetNames.has(config.sheet)) {
+        sheetNames.add(config.sheet);
+        if (workbook.getWorksheet(config.sheet)) continue;
+        const ws = workbook.addWorksheet(config.sheet);
+        // Add header row with column placeholders
+        if (config.columns) {
+          for (const col of config.columns) {
+            const cell = ws.getCell(1, col.col);
+            cell.value = col.src || `Column ${col.col}`;
+          }
+        }
+      }
+    }
+    // Remove default Sheet1 if we added other sheets
+    if (sheetNames.size > 0) {
+      const sheet1 = workbook.getWorksheet('Sheet1');
+      if (sheet1) workbook.removeWorksheet(sheet1.id);
+    }
+  }
+
   // Apply sheet configs
   if (options.configContent && options.state) {
     await renderFromConfig(options.configContent, options.state, workbook);

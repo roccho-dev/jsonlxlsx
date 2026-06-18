@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check:exportability": "node scripts/check-exportability.js",
-    "cli": "node src/cli.js"
+    "cli": "node src/cli.js",
+    "example": "node scripts/generate-example.js"
   },
   "keywords": [
     "jsonl",

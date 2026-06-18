@@ -89,14 +89,14 @@ This document classifies code and content in this repo against the 10-point meta
 ## Testing & Validation
 
 ### Exportability Tests
-- `tests/test_exportability.py`: Scans repo for forbidden patterns (grep-based)
-- Runs as part of standard `pytest` suite
+- `scripts/check-exportability.js`: Scans repo for forbidden patterns (grep-based)
+- Runs as part of standard `npm run check:exportability` command
 - **False negatives possible** if forbidden names are buried in comments or strings
 
 ### Before Proposing/Publishing
 1. Populate `scripts/denylist.txt` with identifiers from your source
-2. Run `pytest tests/test_exportability.py -v` to verify denylist patterns absent
-3. Verify no `.xlsx`, `.jpg`, `.pdf` files present in repo
+2. Run `npm run check:exportability` to verify denylist patterns absent
+3. Verify no `.xlsx`, `.jpg`, `.pdf` files present in repo (except outputs)
 4. Verify no `.env`, `.json` files with credentials
 
 ## Implementation Checklist for New Projects
@@ -122,7 +122,7 @@ When adopting this engine in a new project:
   - Mark data_start_row and style_template_row
   - Engine will copy styles at render time
 
-- [ ] Run reduce_log() + render_sheet_data_replace()
+- [ ] Run engine() or CLI
   - No code changes required if config is correct
   - All business decisions stay in config
 
@@ -133,12 +133,12 @@ When adopting this engine in a new project:
 - **Verification**: `pytest tests/test_exportability.py` must pass
 
 ### Risk: Code depends on initial implementation specifics
-- **Mitigation**: No imports from initial implementation; pure Python + openpyxl
-- **Verification**: `pytest tests/test_exportability.py` with denylist must pass
+- **Mitigation**: No imports from initial implementation; pure JavaScript + exceljs
+- **Verification**: `npm run check:exportability` with denylist must pass
 
 ### Risk: Hardcoded values embedded in code
 - **Mitigation**: All values in `config/` JSONL files; code is generic
-- **Verification**: Review `jsonxlsx/*.py` for any string literals with business meaning
+- **Verification**: Review `src/*.js` for any string literals with business meaning
 
 ## Decision: Exportability Approved
 

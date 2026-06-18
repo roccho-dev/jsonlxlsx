@@ -63,19 +63,21 @@ export async function engine(options) {
  */
 export async function engineFromDir(options) {
   const base = options.inputDir || '.';
+  const fs = await import('fs');
+  const path = await import('path');
 
   // Collect masters from masters/ dir or single file
   let mastersContent = '';
+  const mastersPath = `${base}/masters.jsonl`;
   try {
-    const fs = await import('fs');
-    mastersContent = fs.readFileSync(`${base}/masters.jsonl`, 'utf-8');
+    mastersContent = fs.readFileSync(mastersPath, 'utf-8');
   } catch {
+    const mastersDirPath = `${base}/masters`;
     try {
-      const fs = await import('fs');
-      const files = fs.readdirSync(`${base}/masters`);
+      const files = fs.readdirSync(mastersDirPath);
       const contents = files
         .filter((f) => f.endsWith('.jsonl'))
-        .map((f) => fs.readFileSync(`${base}/masters/${f}`, 'utf-8'));
+        .map((f) => fs.readFileSync(path.join(mastersDirPath, f), 'utf-8'));
       mastersContent = contents.join('\n');
     } catch {
       mastersContent = '';
@@ -84,30 +86,44 @@ export async function engineFromDir(options) {
 
   // Same for edges
   let edgesContent = '';
+  const edgesPath = `${base}/edges.jsonl`;
   try {
-    const fs = await import('fs');
-    edgesContent = fs.readFileSync(`${base}/edges.jsonl`, 'utf-8');
+    edgesContent = fs.readFileSync(edgesPath, 'utf-8');
   } catch {
+    const edgesDirPath = `${base}/edges`;
     try {
-      const fs = await import('fs');
-      const files = fs.readdirSync(`${base}/edges`);
+      const files = fs.readdirSync(edgesDirPath);
       const contents = files
         .filter((f) => f.endsWith('.jsonl'))
-        .map((f) => fs.readFileSync(`${base}/edges/${f}`, 'utf-8'));
+        .map((f) => fs.readFileSync(path.join(edgesDirPath, f), 'utf-8'));
       edgesContent = contents.join('\n');
     } catch {
       edgesContent = '';
     }
   }
 
-  return engine({
-    schemaPath: `${base}/config/schema.jsonl`,
-    mastersPath: mastersContent,
-    edgesPath: edgesContent,
-    configPath: `${base}/config/sheets.jsonl`,
+  // Use custom engine that accepts content strings directly
+  const inputs = {
+    schema: fs.readFileSync(`${base}/config/schema.jsonl`, 'utf-8'),
+    masters: mastersContent,
+    edges: edgesContent,
+  };
+
+  // Reduce
+  const { materialize } = await import('./reduce.js');
+  const state = materialize(inputs);
+
+  // Load sheet config and render
+  const { render } = await import('./render.js');
+  const configContent = fs.readFileSync(`${base}/config/sheets.jsonl`, 'utf-8');
+  const workbook = await render({
     templatePath: options.templatePath,
+    configContent,
+    state,
     outputPath: options.outputPath,
   });
+
+  return { state, workbook };
 }
 
 export default engine;

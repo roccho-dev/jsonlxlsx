@@ -3,18 +3,29 @@
  * Combines reduce + render into a single pipeline.
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, statSync, readdirSync } from 'fs';
+import { join } from 'path';
 import { materialize } from './reduce.js';
 import { render } from './render.js';
 
 /**
- * Load JSONL file content, return as string.
- * @param {string} path - File path
- * @returns {string} File content
+ * Load JSONL file or directory of JSONL files, return as string.
+ * @param {string} path - File path or directory path
+ * @returns {string} File content or merged directory contents
  */
 function loadFile(path) {
   try {
-    return readFileSync(path, 'utf-8');
+    const stat = statSync(path);
+    if (stat.isDirectory()) {
+      const files = readdirSync(path);
+      const contents = files
+        .filter((f) => f.endsWith('.jsonl'))
+        .sort()
+        .map((f) => readFileSync(join(path, f), 'utf-8'));
+      return contents.join('\n');
+    } else {
+      return readFileSync(path, 'utf-8');
+    }
   } catch {
     return '';
   }

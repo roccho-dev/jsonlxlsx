@@ -207,9 +207,9 @@ The engine will copy styles from row 2 of your template and inject data starting
 
 ---
 
-**SSOT**: `ssh://100.124.250.91/home/nixos/repos/jsonlxlsx.git`  
-**Proposal Date**: 2026-06-18  
-**Branch**: `proposal/jsonlxlsx-js-only-engine-260618`  
+**SSOT**: `ssh://100.124.250.91/home/nixos/repos/jsonlxlsx.git`
+**Proposal Date**: 2026-06-18
+**Branch**: `proposal/jsonlxlsx-js-only-engine-260618`
 **Author**: Gen1 (Claude Code), canonical rename by Gen2 Codex
 
 **Supersedes**: `ssh://100.124.250.91/home/nixos/repos/jsonxlsx.git` branch `proposal/jsonxlsx-js-only-engine-260618` at `cc5bc67c2be0e8d401bdb140d49cb252ddf0c927`; retained as compatibility residue.

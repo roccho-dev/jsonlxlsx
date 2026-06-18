@@ -179,6 +179,41 @@ describe('renderSheetDataReplace', () => {
 
     expect(ws.getCell('B2').value).toBe('Alice');
   });
+
+  it('renders assignment matrices with generic keys', async () => {
+    const workbook = new ExcelJS.Workbook();
+    const ws = workbook.addWorksheet('assignments');
+
+    const config = {
+      sheet: 'assignments',
+      source: 'item',
+      data_start_row: 2,
+      columns: [{ col: 1, src: 'id' }],
+      assignment_matrix: {
+        source: 'assignment',
+        id_field: 'id',
+        edge_id_field: 'item_id',
+        assignment_key_field: 'category_id',
+        assignment_keys: ['cat-a', 'cat-b'],
+        mark_field: 'mark',
+        column_start: 2,
+        column_count: 2,
+      },
+    };
+    const state = {
+      masters: [{ type: 'item', id: 'item-1' }],
+      edges: [
+        { type: 'assignment', item_id: 'item-1', category_id: 'cat-a', mark: 'x' },
+        { type: 'assignment', item_id: 'item-1', category_id: 'cat-b', mark: 'y' },
+      ],
+    };
+
+    await renderSheetDataReplace(config, state, workbook);
+
+    expect(ws.getCell('A2').value).toBe('item-1');
+    expect(ws.getCell('B2').value).toBe('x');
+    expect(ws.getCell('C2').value).toBe('y');
+  });
 });
 
 describe('renderFromConfig', () => {

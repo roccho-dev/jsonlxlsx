@@ -13,9 +13,9 @@ This document classifies code and content in this repo against the 10-point meta
 | | Latest-wins semantics with _ts | ✅ Portable | Generic timestamp/tombstone pattern | Core: `src/reduce.js::reduceLog()` |
 | | Template-based XLSX rendering | ✅ Portable | exceljs pattern; style/data separation | Core: `src/render.js` |
 | | Edge lookup (relation join) | ✅ Portable | Generic FK-like join pattern | Core: `src/render.js::renderSheetDataReplace()` |
-| | Bumon (N×M matrix) rendering | ✅ Portable | Parametric matrix filling | Core: `src/render.js::renderSheetDataReplace()` |
+| | Assignment matrix rendering | ✅ Portable | Parametric N×M grid filling with generic keys | Core: `src/render.js::renderSheetDataReplace()` |
 | | Engine CLI & config loading | ✅ Portable | Orchestrates reduce+render; no domain logic | Core: `src/engine.js` |
-| **Sanitized Samples** | Synthetic schema.jsonl | ✅ Allowed | Uses abstract names (release, step, bumon) | Examples: `examples/minimal/config/schema.jsonl` |
+| **Sanitized Samples** | Synthetic schema.jsonl | ✅ Allowed | Uses abstract names (release, step) | Examples: `examples/minimal/config/schema.jsonl` |
 | | Synthetic masters/release.jsonl | ✅ Allowed | Names: release-alpha, release-beta | Examples: `examples/minimal/masters/release.jsonl` |
 | | Synthetic masters/step.jsonl | ✅ Allowed | Names: check-001, check-002, stp-*** | Examples: `examples/minimal/masters/step.jsonl` |
 | | Synthetic sheets.jsonl | ✅ Allowed | Generic sheet rendering config | Examples: `examples/minimal/config/sheets.jsonl` |

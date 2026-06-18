@@ -124,14 +124,14 @@ masters/mixed.jsonl:
 
 **Portable Pattern**: Relationship modeling without hardcoding join logic.
 
-### 5. Bumon (Department) Matrix Support
+### 5. Assignment Matrix Support
 
-**Why**: Multi-dimensional assignment grids (rows = items, columns = departments, cells = marks) are common in Japanese business.
+**Why**: Multi-dimensional assignment grids (rows = items, columns = categories, cells = marks) are common across workflow reports.
 
 **Implementation**: `src/render.js::renderSheetDataReplace()`
-- bumon_matrix config specifies edge source, field mappings, column range
-- For each record, match edges by id_field, build map of bumon_id → mark_field
-- Fill matrix cells by (record_row, bumon_column)
+- assignment_matrix config specifies edge source, field mappings, column range
+- For each record, match edges by id_field, build map of assignment_key → mark_field
+- Fill matrix cells by (record_row, assignment_column)
 
 **Portable Pattern**: Generic support for N×M assignment matrices without custom code.
 

@@ -32,7 +32,7 @@ A portable JSONL-to-XLSX engine with:
 - **Schema-driven natural key dispatch**: Config-driven, no hardcoded keys
 - **Template-based XLSX rendering**: Load template, copy styles, inject data
 - **Edge lookups**: FK-like joins between masters and edges
-- **Bumon matrices**: N×M assignment grids for Japanese business workflows
+- **Assignment matrices**: N×M assignment grids driven by generic keys
 
 ## Design
 
@@ -44,7 +44,7 @@ See `/docs/DESIGN.md` for full design rationale. Key patterns:
 | Schema-driven keys | Config not code | `src/reduce.js::recordKey()` |
 | Template rendering | Style/data separation | `src/render.js::renderSheetDataReplace()` |
 | Edge lookups | Relational joins | `src/render.js` (edge_lookup config) |
-| Bumon matrix | N×M assignments | `src/render.js` (bumon_matrix config) |
+| Assignment matrix | N×M assignments | `src/render.js` (assignment_matrix config) |
 
 ## Installation
 
@@ -198,7 +198,7 @@ The engine will copy styles from row 2 of your template and inject data starting
 - **No Python**: JS-only, no `.py` or `pyproject.toml` files
 - **Minimal deps**: exceljs for XLSX, vitest for tests
 - **Portable code**: No hardcoded identifiers, all business logic in config
-- **Tested**: Reduce, render, edge lookups, bumon matrices covered
+- **Tested**: Reduce, render, edge lookups, assignment matrices covered
 - **Exportability verified**: Denylist check prevents accidental data leakage
 
 ## Status

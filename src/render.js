@@ -1,7 +1,7 @@
 /**
  * Template-based XLSX rendering: load template, copy styles, inject data.
  * Supports data_replace (clear + inject) and preserve (keep template as-is) strategies.
- * Supports edge lookups (FK-like joins) and bumon matrix (N×M assignment grids).
+ * Supports edge lookups (FK-like joins) and assignment matrices (N×M grids).
  */
 
 import ExcelJS from 'exceljs';
@@ -26,7 +26,7 @@ export async function renderPreserve(config, state, workbook) {
 
 /**
  * Render data_replace strategy: clear data rows, inject from masters, copy styles.
- * @param {Object} config - Sheet config {sheet, source, data_start_row, style_template_row, columns, edge_lookup, bumon_matrix}
+ * @param {Object} config - Sheet config {sheet, source, data_start_row, style_template_row, columns, edge_lookup, assignment_matrix}
  * @param {Object} state - {masters, edges}
  * @param {ExcelJS.Workbook} workbook - Loaded template workbook
  */
@@ -113,9 +113,9 @@ export async function renderSheetDataReplace(config, state, workbook) {
       }
     }
 
-    // Bumon matrix: N×M assignment grid
-    if (config.bumon_matrix && state.edges) {
-      const matrix = config.bumon_matrix;
+    // Assignment matrix: N×M assignment grid
+    if (config.assignment_matrix && state.edges) {
+      const matrix = config.assignment_matrix;
       const idVal = master[matrix.id_field];
       const edgeMatches = state.edges.filter(
         (e) =>
@@ -124,9 +124,9 @@ export async function renderSheetDataReplace(config, state, workbook) {
       );
 
       for (let colIdx = 0; colIdx < matrix.column_count; colIdx++) {
-        const bumonId = matrix.bumon_ids[colIdx];
+        const assignmentKey = matrix.assignment_keys[colIdx];
         const mark = edgeMatches
-          .filter((e) => e[matrix.bumon_id_field] === bumonId)
+          .filter((e) => e[matrix.assignment_key_field] === assignmentKey)
           .map((e) => e[matrix.mark_field])
           .join('');
         const cell = rowObj.getCell(matrix.column_start + colIdx);

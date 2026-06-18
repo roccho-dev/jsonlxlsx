@@ -130,7 +130,7 @@ When adopting this engine in a new project:
 
 ### Risk: Accidental leakage of customer data
 - **Mitigation**: All fixtures use synthetic names verified by test suite
-- **Verification**: `pytest tests/test_exportability.py` must pass
+- **Verification**: `npm run check:exportability` must pass
 
 ### Risk: Code depends on initial implementation specifics
 - **Mitigation**: No imports from initial implementation; pure JavaScript + exceljs

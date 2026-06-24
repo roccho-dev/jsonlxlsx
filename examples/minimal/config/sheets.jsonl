@@ -1,0 +1,2 @@
+{"sheet":"releases","source":"release","strategy":"data_replace","data_start_row":2,"style_template_row":2,"columns":[{"col":1,"src":"id"},{"col":2,"src":"name"}]}
+{"sheet":"steps","source":"step","strategy":"data_replace","data_start_row":2,"style_template_row":2,"columns":[{"col":1,"src":"step_id"},{"col":2,"src":"release_id"},{"col":3,"src":"name"}]}

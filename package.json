@@ -2,7 +2,17 @@
   "name": "jsonlxlsx",
   "version": "0.0.0",
   "private": true,
-  "description": "JSONL-to-XLSX publication root metadata",
+  "description": "JSONL-to-XLSX transformation engine",
+  "type": "module",
+  "main": "./src/engine.js",
+  "exports": {
+    ".": "./src/engine.js",
+    "./reduce": "./src/reduce.js",
+    "./render": "./src/render.js"
+  },
+  "bin": {
+    "jsonlxlsx": "./src/cli.js"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -10,6 +20,24 @@
   },
   "scripts": {
     "generate": "node scripts/generate-artifacts.mjs",
-    "check": "node scripts/check-artifacts.mjs"
+    "check": "node scripts/check-artifacts.mjs",
+    "test": "vitest run",
+    "check:exportability": "node scripts/check-exportability.js",
+    "example": "node scripts/generate-example.js"
+  },
+  "keywords": [
+    "jsonl",
+    "xlsx",
+    "append-only",
+    "schema-driven"
+  ],
+  "dependencies": {
+    "exceljs": "^4.3.0"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.0"
+  },
+  "engines": {
+    "node": "node>=18"
   }
 }

@@ -1,1 +1,1 @@
-{"schema":"jsonlxlsx.publication.v1","repo":"roccho-dev/jsonlxlsx","visibility":"public","status":"metadata-only-initial-root","publication_scope":"main-only","implementation_included":false,"tags_included":false,"proposal_refs_included":false,"npm_publish_ready":false}
+{"schema":"jsonlxlsx.publication.v1","visibility":"public","publication_scope":"proposal-branch","implementation_included":true,"npm_publish_ready":false,"github_actions_included":false,"tags_included":false,"historical_refs_included":false}

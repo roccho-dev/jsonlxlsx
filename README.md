@@ -1,14 +1,17 @@
 # jsonlxlsx
 
-JSONL-to-XLSX publication root metadata.
+JSONL-to-XLSX transformation engine.
 
-This public root is generated from `records/*.jsonl`. The records are the authority; root Markdown and package metadata files are generated artifacts for GitHub display and review.
+This repository is generated from `records/*.jsonl`. The records are the authority; root Markdown and package metadata files are generated artifacts for GitHub display and review.
 
 ## Status
 
 - Visibility: public
-- Publication scope: main-only
-- Implementation included: false
+- Publication scope: proposal-branch
+- Implementation included: true
 - npm publish ready: false
+- Proposal status: proposal
 
-Implementation code and historical proposal refs are intentionally not included in this initial public root.
+## Use
+
+Install dependencies, then run tests or invoke the CLI against JSONL configuration and source files. This proposal is not a release package and is not ready for npm publication.

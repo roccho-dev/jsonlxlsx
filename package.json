@@ -1,0 +1,15 @@
+{
+  "name": "jsonlxlsx",
+  "version": "0.0.0",
+  "private": true,
+  "description": "JSONL-to-XLSX publication root metadata",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roccho-dev/jsonlxlsx.git"
+  },
+  "scripts": {
+    "generate": "node scripts/generate-artifacts.mjs",
+    "check": "node scripts/check-artifacts.mjs"
+  }
+}

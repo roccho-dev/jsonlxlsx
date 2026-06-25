@@ -1,0 +1,39 @@
+name: XLSX push trigger
+
+on:
+  push:
+    branches:
+      - proposal/xlsx-ci-runner-260625
+
+permissions:
+  contents: read
+
+jobs:
+  xlsx:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout target proposal
+        uses: actions/checkout@v4
+        with:
+          ref: proposal/xlsx-ci-artifact-260625
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+      - name: Check generated metadata drift
+        run: npm run check
+      - name: Run unit tests
+        run: npm test
+      - name: Generate and verify minimal XLSX
+        run: node scripts/ci-generate-xlsx.mjs
+      - name: Upload XLSX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jsonlxlsx-minimal-xlsx
+          path: |
+            dist/examples/minimal/output.xlsx
+            dist/examples/minimal/summary.json
+          if-no-files-found: error

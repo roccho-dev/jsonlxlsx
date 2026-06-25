@@ -1,0 +1,30 @@
+name: XLSX PR CI
+
+on:
+  pull_request:
+    branches:
+      - proposal/public-implementation-body-260624
+
+permissions:
+  contents: read
+
+jobs:
+  xlsx:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --ignore-scripts
+      - run: npm run check
+      - run: npm test
+      - run: node scripts/ci-generate-xlsx.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jsonlxlsx-minimal-xlsx
+          path: |
+            dist/examples/minimal/output.xlsx
+            dist/examples/minimal/summary.json
+          if-no-files-found: error

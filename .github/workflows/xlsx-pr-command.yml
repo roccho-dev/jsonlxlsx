@@ -1,0 +1,51 @@
+name: XLSX PR command
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: write
+\-jobs:
+  xlsx:
+    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/xlsx-test' && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Resolve PR head
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sha=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.issue.number }} --jq .head.sha)
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr.outputs.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --ignore-scripts
+      - run: npm run check
+      - run: npm test
+      - run: node scripts/ci-generate-xlsx.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jsonlxlsx-minimal-xlsx-pr-${{ github.event.issue.number }}
+          path: |
+            dist/examples/minimal/output.xlsx
+            dist/examples/minimal/summary.json
+          if-no-files-found: error
+      - name: Comment success
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr comment ${{ github.event.issue.number }} --body "XLSX test succeeded for ${{ steps.pr.outputs.sha }}. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Comment failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr comment ${{ github.event.issue.number }} --body "XLSX test failed. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

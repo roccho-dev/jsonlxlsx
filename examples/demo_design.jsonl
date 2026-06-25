@@ -1,0 +1,31 @@
+{"seq":1,"op":"workbook.init","title":"JSONL XLSX synthetic demo","creator":"jsonlxlsx","company":"Synthetic","created":"1980-01-01T00:00:00Z"}
+{"seq":2,"op":"sheet.upsert","sheet_id":"summary","name":"Summary","order":1}
+{"seq":3,"op":"sheet.upsert","sheet_id":"lists","name":"Lists","order":2,"hidden":true}
+{"seq":4,"op":"style.upsert","style_id":"base","font":{"name":"Arial","size":10,"color":"#111827"},"alignment":{"vertical":"center"},"border":{"left":{"style":"thin","color":"#D1D5DB"},"right":{"style":"thin","color":"#D1D5DB"},"top":{"style":"thin","color":"#D1D5DB"},"bottom":{"style":"thin","color":"#D1D5DB"}}}
+{"seq":5,"op":"style.upsert","style_id":"title","font":{"name":"Arial","size":16,"bold":true,"color":"#FFFFFF"},"fill":"#1F2937","alignment":{"horizontal":"center","vertical":"center"}}
+{"seq":6,"op":"style.upsert","style_id":"header","based_on":"base","font":{"bold":true,"color":"#FFFFFF"},"fill":"#2563EB","alignment":{"horizontal":"center","vertical":"center","wrap_text":true}}
+{"seq":7,"op":"style.upsert","style_id":"text","based_on":"base","alignment":{"vertical":"top","wrap_text":true}}
+{"seq":8,"op":"style.upsert","style_id":"number","based_on":"base","number_format":"#,##0","alignment":{"horizontal":"right"}}
+{"seq":9,"op":"style.upsert","style_id":"money","based_on":"base","number_format":"#,##0","alignment":{"horizontal":"right"}}
+{"seq":10,"op":"style.upsert","style_id":"formula","based_on":"money","fill":"#EFF6FF","font":{"bold":true}}
+{"seq":11,"op":"row_pattern.upsert","pattern_id":"title_row","row":{"height":30},"cells":[{"from_col":"A","to_col":"D","style":"title"}],"merges":[{"from_col":"A","to_col":"D"}]}
+{"seq":12,"op":"row_pattern.upsert","pattern_id":"header_row","row":{"height":24},"cells":[{"from_col":"A","to_col":"D","style":"header"}]}
+{"seq":13,"op":"row_pattern.upsert","pattern_id":"data_row","row":{"height":22},"cells":[{"from_col":"A","to_col":"D","style":"text"}]}
+{"seq":14,"op":"column.set","sheet":"summary","col":"A","width":18}
+{"seq":15,"op":"column.set","sheet":"summary","col":"B","width":14}
+{"seq":16,"op":"column.set","sheet":"summary","col":"C","width":14}
+{"seq":17,"op":"column.set","sheet":"summary","col":"D","width":18}
+{"seq":18,"op":"sheet.view","sheet":"summary","show_grid_lines":false,"tab_color":"#2563EB"}
+{"seq":19,"op":"row.emit","sheet":"summary","row":1,"pattern":"title_row","values":["Synthetic JSONL XLSX Demo"]}
+{"seq":20,"op":"row.emit","sheet":"summary","row":3,"pattern":"header_row","values":["Item","Units","Unit Price","Amount"]}
+{"seq":21,"op":"row.emit","sheet":"summary","row":4,"pattern":"data_row","values":["Alpha",{"v":3,"style":"number"},{"v":1200,"style":"money"},{"f":"B4*C4","style":"formula"}]}
+{"seq":22,"op":"row.emit","sheet":"summary","row":5,"pattern":"data_row","values":["Beta",{"v":5,"style":"number"},{"v":900,"style":"money"},{"f":"B5*C5","style":"formula"}]}
+{"seq":23,"op":"row.emit","sheet":"summary","row":6,"pattern":"data_row","values":["Gamma",{"v":2,"style":"number"},{"v":1800,"style":"money"},{"f":"B6*C6","style":"formula"}]}
+{"seq":24,"op":"row.emit","sheet":"summary","row":7,"pattern":"data_row","values":["Total","","",{"f":"SUM(D4:D6)","style":"formula"}]}
+{"seq":25,"op":"table.add","sheet":"summary","name":"SyntheticRows","range":"A3:D6","style":"TableStyleMedium2"}
+{"seq":26,"op":"defined_name.upsert","name":"ItemList","refers_to":"Lists!$A$2:$A$4","comment":"synthetic validation list"}
+{"seq":27,"op":"data_validation.add","sheet":"summary","range":"A4:A6","type":"list","formula1":"ItemList","allow_blank":false}
+{"seq":28,"op":"row.emit","sheet":"lists","row":1,"values":[{"v":"Item","style":"header"}]}
+{"seq":29,"op":"row.emit","sheet":"lists","row":2,"values":["Alpha"]}
+{"seq":30,"op":"row.emit","sheet":"lists","row":3,"values":["Beta"]}
+{"seq":31,"op":"row.emit","sheet":"lists","row":4,"values":["Gamma"]}

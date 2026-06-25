@@ -1,7 +1,0 @@
-# Denylist: forbidden identifiers that must not appear in exported code
-# (edit this for your domain-specific terms before export)
-
-# Example pattern (customize for your project)
-# customer_xyz
-# secret_key_123
-# internal_api_endpoint

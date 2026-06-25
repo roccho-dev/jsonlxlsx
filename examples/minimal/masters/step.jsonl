@@ -1,4 +1,0 @@
-{"type":"step","step_id":"check-001","release_id":"release-alpha","name":"Validation","_ts":"2026-06-01"}
-{"type":"step","step_id":"check-002","release_id":"release-alpha","name":"Testing","_ts":"2026-06-01"}
-{"type":"step","step_id":"stp-101","release_id":"release-beta","name":"Build","_ts":"2026-06-02"}
-{"type":"step","step_id":"stp-102","release_id":"release-beta","name":"Deploy","_ts":"2026-06-02"}

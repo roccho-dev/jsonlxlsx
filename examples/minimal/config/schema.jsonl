@@ -1,3 +1,0 @@
-{"type":"release","presence":["id"],"key":["id"]}
-{"type":"step","presence":["step_id","release_id"],"key":["step_id"]}
-{"type":"approval","presence":["from_id"],"key":["from_id"]}

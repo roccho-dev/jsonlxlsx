@@ -1,40 +1,51 @@
 {
   "name": "@jsonlxlsx/engine",
-  "version": "0.1.0",
-  "description": "JSONL-to-XLSX rendering engine: append-only reduce + template-based render",
+  "version": "0.2.0-hucre-backend",
+  "description": "Append-only JSONL to XLSX compiler using hucre as the XLSX writer backend.",
   "type": "module",
-  "main": "./src/engine.js",
+  "main": "./src/core/index.mjs",
+  "browser": "./src/adapters/browser/index.mjs",
   "exports": {
-    ".": "./src/engine.js",
-    "./reduce": "./src/reduce.js",
-    "./render": "./src/render.js"
+    ".": "./src/core/index.mjs",
+    "./core": "./src/core/index.mjs",
+    "./ports": "./src/ports/index.mjs",
+    "./adapters/node": "./src/adapters/node/index.mjs",
+    "./adapters/browser": "./src/adapters/browser/index.mjs",
+    "./adapters/cli": "./src/adapters/cli/node.mjs"
+  },
+  "bin": {
+    "jsonlxlsx": "./src/adapters/cli/node.mjs",
+    "jsonl-xlsx-js": "./src/adapters/cli/node.mjs"
   },
   "scripts": {
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "check:exportability": "node scripts/check-exportability.js",
-    "cli": "node src/cli.js",
-    "example": "node scripts/generate-example.js"
+    "syntax": "node tools/check-syntax.mjs",
+    "lint:arch": "node tools/lint-architecture.mjs",
+    "test": "node --test",
+    "proof": "node tools/proof.mjs && node tools/proof-separated.mjs",
+    "proof:separated": "node tools/proof-separated.mjs",
+    "shiftleft": "node tools/check-syntax.mjs && node tools/lint-architecture.mjs && node --test && node tools/proof.mjs && node tools/proof-separated.mjs",
+    "check:exportability": "node scripts/check-exportability.mjs"
   },
   "keywords": [
-    "jsonl",
     "xlsx",
+    "jsonl",
     "append-only",
-    "reduce",
-    "schema-driven"
+    "browser",
+    "node",
+    "hucre"
   ],
-  "author": "Gen1 (Claude Code)",
-  "license": "Proprietary",
+  "license": "UNLICENSED",
   "dependencies": {
-    "exceljs": "^4.3.0"
-  },
-  "devDependencies": {
-    "vitest": "^4.1.0"
-  },
-  "overrides": {
-    "uuid": "^11.1.1"
+    "hucre": "0.6.1"
   },
   "engines": {
-    "node": ">=18.0.0"
-  }
+    "node": ">=20"
+  },
+  "files": [
+    "src",
+    "docs",
+    "examples",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md"
+  ]
 }
